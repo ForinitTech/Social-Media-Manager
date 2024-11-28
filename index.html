@@ -119,7 +119,6 @@
             }
         }
 
-        /* Modal (Post Preview) Styles */
         .post-preview {
             display: none;
             position: fixed;
@@ -181,8 +180,8 @@
 
         .post-image {
             width: 100%;
-            max-height: 400px;
-            object-fit: cover;
+            max-height: auto;
+            object-fit:fill;
             margin-bottom: 15px;
         }
 
@@ -226,7 +225,6 @@
             color: #4c68d7 ;
         }
 
-        /* Close button styles */
         .close-btn {
             background: none;
             border: none;
@@ -283,15 +281,12 @@
     </div>
 
     <script>
-         // Handle form submission
          document.getElementById("instagramForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
             const form = event.target;
             const caption = form.caption.value;
             const media = form.media.files[0];
-
-            // Show modal
             const postPreview = document.getElementById("postPreview");
             const postImage = document.getElementById("postImage");
             const postCaption = document.getElementById("postCaption");
@@ -300,30 +295,23 @@
 
             postPreview.style.display = "block";
             modalOverlay.style.display = "block";
-            postImage.src = URL.createObjectURL(media); // Set image preview
-            postCaption.innerHTML = processHashtags(caption); // Set caption preview with hashtags styled
-
-            // Show the actual post button
+            postImage.src = URL.createObjectURL(media); 
+            postCaption.innerHTML = processHashtags(caption); 
             postButton.style.display = "inline-block";
             document.getElementById("postButton").addEventListener("click", closePreview);
-            // Save the media and caption for posting later
             postButton.onclick = function () {
                 postContent(caption, media);
             };
         });
-
-        // Process hashtags and style them with blue color
         function processHashtags(caption) {
             return caption.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
         }
-
-        // Handle post content
         async function postContent(caption, media) {
             const loader = document.getElementById("loader");
             const result = document.getElementById("result");
 
             loader.style.display = "block";
-            result.innerText = ""; // Clear previous result
+            result.innerText = ""; 
 
             const formData = new FormData();
             formData.append("caption", caption);
@@ -344,22 +332,15 @@
                     const resultData = await response.json();
                     result.innerText = `❌ Error: ${resultData.message}`;
                 }
-
-                // Close the modal after post attempt
                 closePreview();
 
             } catch (error) {
                 loader.style.display = "none";
                 result.innerText = `❌ Error: ${error.message}`;
-                
-                // Close the modal after error
                 closePreview();
             }
         }
-
-        // Close post preview modal
         document.getElementById("closeBtn").addEventListener("click", closePreview);
-
         function closePreview() {
             document.getElementById("postPreview").style.display = "none";
             document.getElementById("modalOverlay").style.display = "none";
