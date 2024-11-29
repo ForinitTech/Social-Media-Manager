@@ -5,7 +5,323 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitter - Social Media Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1DA1F2, #004C8C);
+            color: #14171a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 40px;
+            max-width: 400px;
+        }
+        .caption-input {
+            width: 100%;
+            height: 150px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: left;
+            vertical-align: top;
+            resize: none;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #14171a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #657786;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ccd6dd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #1da1f2;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccd6dd;
+            resize: none;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        button {
+            background: #1da1f2;
+            color: #fff;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+ /* Style the actions container */
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    padding: 10px 0;
+    border-top: 1px solid #e6ecf0;
+}
+
+/* Style each action item */
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+    padding: 5px;
+}
+
+/* Default icon color */
+.action-item i {
+    color: #657786; /* Default gray for icons */
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+/* Count label below the icons */
+.action-item .count {
+    font-size: 14px;
+    color: #657786;
+    margin-top: 3px;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for all icons */
+.action-item:hover i {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Specific Hover Colors for Each Action */
+.like:hover i {
+    color: #e0245e; /* Twitter red for like (heart) icon */
+}
+
+.comment:hover i {
+    color: #1DA1F2; /* Twitter blue for comment icon */
+}
+
+.retweet:hover i {
+    color: #17BF63; /* Twitter green for retweet icon */
+}
+
+.save:hover i {
+    color: #657786; /* Same color for save icon on hover */
+}
+
+/* Active States for Icons when clicked */
+.like.active i {
+    color: #e0245e; /* Active red for like (heart) icon */
+}
+
+.comment.active i {
+    color: #1DA1F2; /* Active blue for comment icon */
+}
+
+.retweet.active i {
+    color: #17BF63; /* Active green for retweet icon */
+}
+
+.save.active i {
+    color: #657786; /* Active gray for save icon */
+}
+
+        button:hover {
+            background: #0d95e8;
+        }
+
+        .loader {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1da1f2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .post-preview {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 10px;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .post-header {
+            display: flex;
+            padding: 10px;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .username {
+            color: #1da1f2;
+            font-weight: bold;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: auto;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        /* Hover effect for all icons */
+.action-item:hover i {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Specific Hover Colors for Each Action */
+.like:hover i {
+    color: #e0245e; /* Twitter red for like (heart) icon */
+}
+
+.comment:hover i {
+    color: #1DA1F2; /* Twitter blue for comment icon */
+}
+
+.retweet:hover i {
+    color: #17BF63; /* Twitter green for retweet icon */
+}
+
+.save:hover i {
+    color: #657786; /* Same color for save icon on hover */
+}
+
+/* Active States for Icons when clicked */
+.like.active i {
+    color: #e0245e; /* Active red for like (heart) icon */
+}
+
+.comment.active i {
+    color: #1DA1F2; /* Active blue for comment icon */
+}
+
+.retweet.active i {
+    color: #17BF63; /* Active green for retweet icon */
+}
+
+.save.active i {
+    color: #657786; /* Active gray for save icon */
+}
+
+
+        .caption {
+            font-size: 14px;
+            color: #14171a;
+        }
+        #postButton {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #14171a;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .post-footer{
+            padding: 20px;
+        }
+    </style>
 </head>
+
 <body>
 
     <!-- Sidebar -->
