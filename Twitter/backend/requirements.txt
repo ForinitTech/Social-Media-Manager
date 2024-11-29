@@ -1,0 +1,4 @@
+tweepy
+requests_oauthlib
+python-dotenv
+Flask

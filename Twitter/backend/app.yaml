@@ -1,0 +1,3 @@
+runtime: python310  # or the Python version you prefer
+
+entrypoint: gunicorn -b :$PORT main:tweet_with_media

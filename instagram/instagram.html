@@ -298,7 +298,6 @@
             postImage.src = URL.createObjectURL(media); 
             postCaption.innerHTML = processHashtags(caption); 
             postButton.style.display = "inline-block";
-            document.getElementById("postButton").addEventListener("click", closePreview);
             postButton.onclick = function () {
                 postContent(caption, media);
             };
@@ -340,6 +339,7 @@
                 closePreview();
             }
         }
+        document.getElementById("postButton").addEventListener("click", closePreview);
         document.getElementById("closeBtn").addEventListener("click", closePreview);
         function closePreview() {
             document.getElementById("postPreview").style.display = "none";
